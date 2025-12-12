@@ -3,8 +3,23 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <fcntl.h>
+
+
 
 #define MaxLen 1024
+
+void log_cmd(char *cmds)
+{
+    int fd = open("myshell.log", O_WRONLY | O_CREAT | O_APPEND, 0644);
+    if (fd == -1)
+    {
+        perror("log_cmd error");
+        return;
+    }
+    write(fd, cmds, strlen(cmds));
+    write(fd, "\n",1);
+}
 
 int main() 
 {
@@ -12,6 +27,7 @@ int main()
 
     while(1)
     {
+
         printf("myprog> ");
         fflush(stdout);
         //reads input
@@ -23,11 +39,13 @@ int main()
         //removes \n
         input[strcspn(input, "\n")] = 0;
 
-        if(input[0] == "\0")
+        if(input[0] == '\0')
         {
             continue;
         }
 
+        log_cmd(input);
+        
         //allocate mem
         char **args = malloc(64 * sizeof(char*));
 
@@ -42,7 +60,7 @@ int main()
 
         args[i] = NULL; // Null-terminate the array
 
-        if(strcmp(args[0], "exit") == 0)
+        if((strcmp(args[0], "exit") == 0) || (strcmp(args[0], "quit")) == 0)
         {
             free(args);
             break;
@@ -64,6 +82,8 @@ int main()
             {
                 perror("myshell: cd");
             }
+            free(args);
+            continue;
         }
 
         pid_t  pid = fork();
