@@ -1,6 +1,11 @@
 #include <stdio.h>
 
-int main() {
-    printf("Hello, World!\n");
+int main() 
+{
+    while(1)
+    {
+        printf("myprog> ");
+        fflush(stdout);
+    }    
     return 0;
 }
