@@ -1,2 +1,4 @@
-whoami
-exit
+[pid=4189] cmd="ls > out.txt" status=0
+[pid=4627] cmd="sleep 3 " status=0
+[pid=4677] cmd="ls" status=0
+[pid=5225] cmd="ls" status=0

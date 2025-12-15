@@ -1,30 +1,16 @@
-# Output executable name (REQUIRED: myshell)
+CC = gcc
+CFLAGS = -Wall -Wextra -g
+# This line is critical - it tells Make to build ALL 4 files
+OBJ = main.o parser.o execute.o utils.o
 TARGET = myshell
-CC     = gcc
-# Removed -O2 so you can debug variables clearly
-CFLAGS = -g -Wall -Wextra -std=c11
-LDFLAGS=
-LDLIBS =
-
-# EXPLICITLY list your files here.
-# As you add parse.c or execute.c, add them to this list.
-SRCS = main.c
-
-# Automagic setup (Don't touch below)
-OBJS := $(SRCS:%.c=%.o)
-DEPS := $(OBJS:.o=.d)
-
-.PHONY: all clean
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+$(TARGET): $(OBJ)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
-
--include $(DEPS)
+%.o: %.c myshell.h
+	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f $(TARGET) $(OBJS) $(DEPS) myshell.log
+	rm -f $(OBJ) $(TARGET) myshell.log
